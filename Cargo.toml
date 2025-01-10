@@ -1,0 +1,51 @@
+[package]
+name = "dad-jokes-collector"
+version = "0.1.0"
+edition = "2021"
+authors = ["Max Tottenham <mtottenh@gmail.com>"]
+description = "A service that collects dad jokes and stores them in a database"
+license = "MIT"
+
+[package.metadata.deb]
+maintainer = "Max Tottenham <mtottenh@gmail.com>"
+#copyright = "2025, Your Name <your.email@example.com>"
+#license-file = ["LICENSE", "4"]
+extended-description = """\
+A service that periodically collects dad jokes from icanhazdadjoke.com \
+and stores them in a local database."""
+depends = "$auto"
+section = "utils"
+priority = "optional"
+assets = [
+    ["target/release/dad-jokes-collector", "usr/bin/", "755"],
+    ["target/release/dad-jokes-query", "usr/bin/", "755"],
+    ["debian/dad-jokes-collector.service", "lib/systemd/system/", "644"],
+    ["debian/config.toml", "etc/dad-jokes-collector/", "644"],
+]
+maintainer-scripts = "debian/"
+systemd-units = { unit-name = "dad-jokes-collector" }
+
+
+[dependencies]
+tokio = { version = "1.36", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rusqlite = { version = "0.31", features = ["bundled"] }
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tokio-stream = "0.1"
+futures = "0.3"
+toml = "0.8"
+directories = "5.0"
+rand = "0.8"
+clap = { version = "4.4", features = ["derive"] }
+
+[[bin]]
+name = "dad-jokes-collector"
+path = "src/main.rs"
+
+[[bin]]
+name = "dad-jokes-query"
+path = "src/bin/query.rs"

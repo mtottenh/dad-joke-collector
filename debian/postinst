@@ -1,0 +1,34 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        # Create dad-jokes user and group if they don't exist
+        if ! getent group dad-jokes >/dev/null; then
+            addgroup --system dad-jokes
+        fi
+        if ! getent passwd dad-jokes >/dev/null; then
+            adduser --system --ingroup dad-jokes --no-create-home \
+                    --home /nonexistent --shell /usr/sbin/nologin \
+                    dad-jokes
+        fi
+
+        # Create and set permissions for data directory
+        mkdir -p /var/lib/dad-jokes-collector
+        chown dad-jokes:dad-jokes /var/lib/dad-jokes-collector
+        chmod 755 /var/lib/dad-jokes-collector
+
+        # Set permissions for config directory
+        chown root:dad-jokes /etc/dad-jokes-collector
+        chmod 775 /etc/dad-jokes-collector
+        chown root:dad-jokes /etc/dad-jokes-collector/config.toml
+        chmod 664 /etc/dad-jokes-collector/config.toml
+
+        # Reload systemd to pick up new service
+        if [ -x /bin/systemctl ]; then
+            systemctl daemon-reload
+        fi
+    ;;
+esac
+
+#DEBHELPER#

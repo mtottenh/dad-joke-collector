@@ -1,0 +1,34 @@
+[Unit]
+Description=Dad Jokes Collector Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dad-jokes-collector -c /etc/dad-jokes-collector/config.toml
+Restart=always
+RestartSec=30
+User=dad-jokes
+Group=dad-jokes
+
+# Make /etc writable for configuration
+ReadWritePaths=/etc/dad-jokes-collector
+# Make /var writable for the database
+ReadWritePaths=/var/lib/dad-jokes-collector
+
+# Hardening options
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectClock=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+
+[Install]
+WantedBy=multi-user.target
+

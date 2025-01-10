@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        # Remove data directory
+        rm -rf /var/lib/dad-jokes-collector
+
+        # Remove configuration
+        rm -rf /etc/dad-jokes-collector
+
+        # Remove user and group
+        if getent passwd dad-jokes >/dev/null; then
+            deluser --quiet --system dad-jokes || true
+        fi
+        if getent group dad-jokes >/dev/null; then
+            delgroup --quiet --system dad-jokes || true
+        fi
+    ;;
+esac
+
+#DEBHELPER#
