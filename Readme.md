@@ -18,5 +18,23 @@ There are only two config parameters.
 
 The server can be run as a systemd service, see [dad-joke-collector.service](./debian/dad-joke-collector.service) for details.
 
+## Usage
 
+Start the crawler
 
+`/usr/bin/dad-jokes-collector`
+
+It should tell you as it adds jokes to the SQLite DB:
+
+```
+dad-jokes-collector[261831]: 2025-01-10T00:49:00.760186Z  INFO dad_jokes_collector: New joke stored: What did the green grape say to the purple grape?
+dad-jokes-collector[261831]: BREATH!!
+```
+
+Getting a joke from the DB is easy:
+```
+$ dad-jokes-query
+Someone broke into my house last night and stole my limbo trophy. How low can you go?
+```
+
+Stick it in your .bashrc to be entertained on the daily ^_^
